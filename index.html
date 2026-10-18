@@ -52,7 +52,7 @@ function rigorousBank(l,ch){
  add('Dans le triangle ABC, M appartient à [AB] et N appartient à [AC]. AM = 3 cm, AB = 8 cm, AN = 4 cm et AC = 10 cm. Réaliser un croquis au brouillon. Les droites (MN) et (BC) sont-elles parallèles ? (oui/non)','non','exo','Contraposée du théorème de Thalès');
  add('Une échelle de 5 m est appuyée contre un mur vertical. Son pied est à 3 m du mur. À quelle hauteur, en m, atteint-elle le mur ?','4','exo','Modélisation : échelle et Pythagore');
  add('Un arbre projette une ombre de 8 m. Au même moment, un bâton vertical de 1,5 m projette une ombre de 2 m. Quelle est la hauteur de l’arbre, en m ?','6','exo','Modélisation : ombres et Thalès');
- add('Dans ABC rectangle en A, AB = 6 cm et AC = 8 cm. M appartient à [AB] avec AM = 3 cm ; N appartient à [AC] et (MN) // (BC). Calculer MN, en cm.','5','exo','Synthèse : Pythagore et Thalès');
+ add('Dans ABC rectangle en A, AB = 6 cm et AC = 8 cm. M appartient à [AB] avec AM = 3 cm ; N appartient à [AC] et (MN) // (BC). Faire un croquis au brouillon puis calculer MN, en cm.','5','exo','Synthèse : Pythagore et Thalès');
  }
  if(l==='4e'&&ch==='Théorème de Pythagore'){
  add('Le théorème de Pythagore s’applique directement à quel type de triangle ?','rectangle','cours','Hypothèse du théorème');
@@ -61,8 +61,8 @@ function rigorousBank(l,ch){
  add('Calculer 11².','121','auto','Calculer un carré');
  add('Calculer √169.','13','auto','Calculer une racine carrée');
  add('Calculer 15² − 9².','144','auto','Soustraire deux carrés');
- add('Un triangle rectangle a pour côtés de l’angle droit 5 cm et 12 cm. Calculer l’hypoténuse, en cm.','13','exo','Calculer une hypoténuse');
- add('Dans un triangle rectangle, l’hypoténuse mesure 10 cm et un côté de l’angle droit 6 cm. Calculer l’autre côté, en cm.','8','exo','Calculer un côté de l’angle droit');
+ add('ABC est un triangle rectangle en A. On donne AB = 5 cm et AC = 12 cm. Calculer BC, en cm.','13','exo','Calculer une hypoténuse');
+ add('ABC est un triangle rectangle en A. On donne BC = 10 cm et AB = 7 cm. Calculer AC, en cm. Arrondir le résultat au dixième.','7,1','exo','Calculer un côté de l’angle droit');
  add('Un rectangle mesure 8 cm sur 15 cm. Quelle est la longueur de sa diagonale, en cm ?','17','exo','Modéliser une diagonale');
  add('Un triangle de côtés 6 cm, 8 cm et 10 cm est-il rectangle ? (oui/non)','oui','exo','Reconnaître un triangle rectangle');
  add('Un triangle de côtés 4 cm, 6 cm et 7 cm est-il rectangle ? (oui/non)','non','exo','Exclure un triangle rectangle');
@@ -308,11 +308,11 @@ function generatedQuestions(l,ch){
 
 function geometricFigure(x){
  const c=x.competence||'';
- const isThales=/Thalès|parallélisme|parallèles/i.test(c)&&!/Cours|Choisir le théorème|Contraposée/i.test(c);
- const isPyth=/Pythagore|hypoténuse|côté de l’angle droit/i.test(c)&&!/Condition|hypoténuse$|Réciproque|Contraposée/i.test(c);
+ const isThales=/Thalès|parallélisme|parallèles/i.test(c)&&!/Cours|Choisir le théorème|Contraposée|Synthèse/i.test(c);
+ const isPyth=/Pythagore|hypoténuse|côté de l’angle droit/i.test(c)&&!/Condition|hypoténuse$|Réciproque|Contraposée/i.test(c)&&/ABC|triangle ABC/i.test(x.text||'');
  const isShadow=/ombres et Thalès/i.test(c);
  if(isShadow)return '<figure class="math-figure"><svg viewBox="0 0 400 155" role="img" aria-label="Schéma de deux triangles semblables : arbre et bâton verticaux, ombres au sol et rayons solaires parallèles"><path d="M30 130 H375 M75 130 V20 L260 130 M285 130 V77 L375 130" stroke="#e6d8ff" fill="none" stroke-width="2.5"/><path d="M75 115 h15 v15 M285 115 h15 v15" stroke="#55e1bd" fill="none" stroke-width="2"/><text x="42" y="68" fill="white">Arbre</text><text x="300" y="80" fill="white">Bâton</text><text x="143" y="148" fill="white">8 m</text><text x="320" y="148" fill="white">2 m</text><text x="290" y="108" fill="#ffcf38">1,5 m</text></svg><figcaption>Schéma non à l’échelle</figcaption></figure>';
- if(isThales)return '<figure class="math-figure"><svg viewBox="0 0 400 210" role="img" aria-label="Triangle ABC, M sur le segment AB, N sur le segment AC, segment MN tracé. Le parallélisme éventuel est à établir à partir des données."><path d="M200 20 L45 185 L355 185 Z" fill="none" stroke="#e6d8ff" stroke-width="2.5"/><path d="M135 90 L265 90" stroke="#55e1bd" stroke-width="3" stroke-dasharray="7 5"/><g fill="white" font-size="17"><text x="195" y="15">A</text><text x="24" y="200">B</text><text x="355" y="200">C</text><text x="115" y="88">M</text><text x="272" y="88">N</text></g></svg><figcaption>Schéma non à l’échelle — les parallélismes non donnés restent à démontrer</figcaption></figure>';
+ if(isThales&&/triangle ABC|Dans ABC/i.test(x.text||'')&&/M|D/.test(x.text||'')&&/N/.test(x.text||''))return '<figure class="math-figure"><svg viewBox="0 0 400 210" role="img" aria-label="Triangle ABC, M sur le segment AB, N sur le segment AC, segment MN tracé. Le parallélisme éventuel est à établir à partir des données."><path d="M200 20 L45 185 L355 185 Z" fill="none" stroke="#e6d8ff" stroke-width="2.5"/><path d="M135 90 L265 90" stroke="#55e1bd" stroke-width="3" stroke-dasharray="7 5"/><g fill="white" font-size="17"><text x="195" y="15">A</text><text x="24" y="200">B</text><text x="355" y="200">C</text><text x="115" y="88">M</text><text x="272" y="88">N</text></g></svg><figcaption>Schéma non à l’échelle — les parallélismes non donnés restent à démontrer</figcaption></figure>';
  if(isPyth)return '<figure class="math-figure"><svg viewBox="0 0 400 205" role="img" aria-label="Triangle ABC rectangle en A, AB horizontal, AC vertical, BC hypoténuse"><path d="M90 160 L90 30 L325 160 Z" fill="none" stroke="#e6d8ff" stroke-width="2.5"/><path d="M90 143 h17 v17" stroke="#55e1bd" stroke-width="2.5" fill="none"/><g fill="white" font-size="18"><text x="68" y="176">A</text><text x="65" y="27">C</text><text x="332" y="176">B</text></g></svg><figcaption>Schéma non à l’échelle — angle droit en A</figcaption></figure>';
  return '';
 }
