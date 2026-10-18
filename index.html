@@ -319,7 +319,7 @@ function geometricFigure(x){
 function graphForQuestion(x){
  const figure=geometricFigure(x);if(figure)return figure;
  const t=x.text||'';
- const match=t.match(/effectifs associés aux notes 1, 2 et 3 sont respectivement (\\d+), (\\d+) et (\\d+)/);
+ const match=t.match(/effectifs associés aux notes 1, 2 et 3 sont respectivement (\d+), (\d+) et (\d+)/);
  if(!match)return '';
  const values=match.slice(1).map(Number),max=Math.max(...values);
  return '<div role="img" aria-label="Diagramme en bâtons : notes 1, 2 et 3, effectifs '+values.join(', ')+'" style="display:flex;align-items:end;gap:16px;height:145px;padding:12px;border-bottom:2px solid #bca7d9;margin:12px 0">'+values.map((v,i)=>'<div style="flex:1;text-align:center"><div style="font-size:12px">'+v+'</div><div style="height:'+(v/max*95)+'px;background:#55e1bd;border-radius:5px 5px 0 0"></div><small>Note '+(i+1)+'</small></div>').join('')+'</div>';
