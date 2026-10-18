@@ -382,7 +382,7 @@ function correctAnswer(expected,given){
  if(e===g)return true;
  // Ne pas interpréter des mots, une unité isolée ou une saisie vide comme le nombre zéro.
  const numeric=t=>{
-  if(!/^[+-]?(?:\\d+(?:\\.\\d+)?|\\.\\d+)(?:\\/[+-]?(?:\\d+(?:\\.\\d+)?|\\.\\d+))?$/.test(t))return NaN;
+  if(!/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:\/[+-]?(?:\d+(?:\.\d+)?|\.\d+))?$/.test(t))return NaN;
   const parts=t.split('/'),a=Number(parts[0]);
   if(parts.length===1)return a;
   const b=Number(parts[1]);return b!==0?a/b:NaN;
