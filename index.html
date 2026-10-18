@@ -15,7 +15,59 @@ const chapters={"6e":["Nombres entiers","Droites et cercles","Nombres décimaux"
 let level='4e',mode='mixte',quiz=[],copies=[],closed=false,validated=false,studentAnswers=[];
 const $=id=>document.getElementById(id);const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function q(text,answer,kind,competence,explanation=''){return {text,answer:String(answer),kind,competence,explanation};}
-function questionBank(l,ch){let bank=[];
+/* Questions expertisées : compétences distinctes, hypothèses et consignes explicites. */
+function rigorousBank(l,ch){
+ const a=[],add=(text,answer,kind,competence,explanation='')=>a.push(q(text,answer,kind,competence,explanation));
+ if(l==='3e'&&ch==='Théorèmes de Pythagore et de Thalès'){
+ add('Énoncer la condition géométrique indispensable pour appliquer le théorème de Pythagore. Répondre par un mot.','rectangle','cours','Condition de Pythagore');
+ add('Dans un triangle ABC rectangle en A, quel côté est l’hypoténuse ? (AB, AC ou BC)','BC','cours','Identifier l’hypoténuse');
+ add('Dans un triangle ABC, M appartient à [AB], N appartient à [AC] et (MN) est parallèle à (BC). Quel théorème permet de calculer AN si AM, AB et AC sont connus ?','Thalès','cours','Choisir le théorème de Thalès');
+ add('Calculer 12² − 5².','119','auto','Différence de deux carrés');
+ add('Calculer √144.','12','auto','Racine carrée exacte');
+ add('Calculer 18 × 4 ÷ 12.','6','auto','Produit en croix');
+ add('ABC est rectangle en A, AB = 9 cm et AC = 12 cm. Calculer BC, en cm.','15','exo','Pythagore : calculer l’hypoténuse');
+ add('ABC est rectangle en A, BC = 17 cm et AB = 8 cm. Calculer AC, en cm.','15','exo','Pythagore : calculer un côté de l’angle droit');
+ add('Un triangle a pour côtés 7 cm, 24 cm et 25 cm. Est-il rectangle ? Répondre oui ou non.','oui','exo','Réciproque du théorème de Pythagore');
+ add('Un triangle a pour côtés 5 cm, 6 cm et 8 cm. Est-il rectangle ? Répondre oui ou non.','non','exo','Contraposée du théorème de Pythagore');
+ add('Dans ABC, M est sur [AB], N sur [AC] et (MN) // (BC). AM = 4 cm, AB = 10 cm et AC = 15 cm. Calculer AN, en cm.','6','exo','Thalès : calculer une longueur');
+ add('Dans ABC, M est sur [AB], N sur [AC], AM = 3 cm, AB = 9 cm, AN = 5 cm et AC = 15 cm. Les droites (MN) et (BC) sont-elles parallèles ? (oui/non)','oui','exo','Réciproque du théorème de Thalès');
+ add('Dans ABC, M est sur [AB], N sur [AC], AM = 3 cm, AB = 8 cm, AN = 4 cm et AC = 10 cm. Les droites (MN) et (BC) sont-elles parallèles ? (oui/non)','non','exo','Contraposée du théorème de Thalès');
+ add('Une échelle de 5 m est appuyée contre un mur vertical. Son pied est à 3 m du mur. À quelle hauteur, en m, atteint-elle le mur ?','4','exo','Modélisation : échelle et Pythagore');
+ add('Un arbre projette une ombre de 8 m. Au même moment, un bâton vertical de 1,5 m projette une ombre de 2 m. Quelle est la hauteur de l’arbre, en m ?','6','exo','Modélisation : ombres et Thalès');
+ add('Dans ABC rectangle en A, AB = 6 cm et AC = 8 cm. M appartient à [AB] avec AM = 3 cm ; N appartient à [AC] et (MN) // (BC). Calculer MN, en cm.','5','exo','Synthèse : Pythagore et Thalès');
+ }
+ if(l==='4e'&&ch==='Théorème de Pythagore'){
+ add('Le théorème de Pythagore s’applique directement à quel type de triangle ?','rectangle','cours','Hypothèse du théorème');
+ add('Dans un triangle ABC rectangle en B, quel côté est l’hypoténuse ?','AC','cours','Identifier une hypoténuse');
+ add('ABC est rectangle en A. Compléter : BC² = AB² + … (écrire le carré du côté manquant).','AC²','cours','Écrire une égalité de Pythagore');
+ add('Calculer 11².','121','auto','Calculer un carré');
+ add('Calculer √169.','13','auto','Calculer une racine carrée');
+ add('Calculer 15² − 9².','144','auto','Soustraire deux carrés');
+ add('Un triangle rectangle a pour côtés de l’angle droit 5 cm et 12 cm. Calculer l’hypoténuse, en cm.','13','exo','Calculer une hypoténuse');
+ add('Dans un triangle rectangle, l’hypoténuse mesure 10 cm et un côté de l’angle droit 6 cm. Calculer l’autre côté, en cm.','8','exo','Calculer un côté de l’angle droit');
+ add('Un rectangle mesure 8 cm sur 15 cm. Quelle est la longueur de sa diagonale, en cm ?','17','exo','Modéliser une diagonale');
+ add('Un triangle de côtés 6 cm, 8 cm et 10 cm est-il rectangle ? (oui/non)','oui','exo','Reconnaître un triangle rectangle');
+ add('Un triangle de côtés 4 cm, 6 cm et 7 cm est-il rectangle ? (oui/non)','non','exo','Exclure un triangle rectangle');
+ add('Un triangle rectangle a une hypoténuse de 7 cm et un côté de 4 cm. Donner l’autre côté au dixième de cm.','5,7','exo','Calcul approché et arrondi');
+ }
+ if(ch==='Statistiques'&&(l==='3e'||l==='4e'||l==='5e')){
+ add('Comment appelle-t-on la différence entre la plus grande et la plus petite valeur d’une série ?','étendue','cours','Définition de l’étendue');
+ add('Quelle mesure partage une série ordonnée en deux groupes de même effectif ?','médiane','cours','Définition de la médiane');
+ add('Calculer la moyenne de 8 ; 10 ; 12 ; 14.','11','auto','Moyenne arithmétique');
+ add('Calculer l’étendue de 3 ; 5 ; 9 ; 12.','9','auto','Étendue');
+ add('Dans une classe, 6 élèves sur 24 viennent à pied. Donner leur fréquence en pourcentage.','25','auto','Fréquence en pourcentage');
+ add('Les tailles (en cm) de cinq basketteurs sont 170 ; 175 ; 180 ; 185 ; 190. Quelle est la taille médiane, en cm ?','180','exo','Médiane : effectif impair');
+ add('Les notes ordonnées sont 7 ; 9 ; 10 ; 12 ; 14 ; 16. Quelle est la médiane ?','11','exo','Médiane : effectif pair');
+ add('Une série comporte les valeurs 2 ; 4 ; 4 ; 6 ; 9. Quelle est l’étendue ?','7','exo','Interpréter une étendue');
+ add('Sur 30 élèves, 12 pratiquent le football. Donner la fréquence en pourcentage.','40','exo','Fréquence contextualisée');
+ add('Le diagramme en bâtons indique les effectifs suivants : note 1 : 4 élèves ; note 2 : 7 élèves ; note 3 : 9 élèves. Quel est l’effectif total ?','20','exo','Lire les effectifs d’un diagramme');
+ add('Une équipe a marqué 6, 8, 10, 12 et 14 points sur cinq matchs. Calculer sa moyenne de points.','10','exo','Moyenne en contexte');
+ add('La moyenne de quatre valeurs est 12. Trois valeurs sont 8 ; 11 ; 13. Quelle est la quatrième valeur ?','16','exo','Retrouver une valeur à partir de la moyenne');
+ add('Une enquête indique : vélo 8 élèves, marche 12 élèves, bus 10 élèves. Quel pourcentage vient à pied ? Arrondir au dixième si nécessaire.','40','exo','Interpréter un tableau d’effectifs');
+ }
+ return a;
+}
+function questionBank(l,ch){const rigorous=rigorousBank(l,ch);if(rigorous.length)return rigorous;let bank=[];
  if(l==='4e'&&ch==='Théorème de Pythagore')bank=[q('Dans quel type de triangle peut-on appliquer directement le théorème de Pythagore ?','rectangle','cours','Connaître les propriétés'),q('Comment s’appelle le côté opposé à l’angle droit ?','hypoténuse','cours','Connaître le vocabulaire'),q('ABC est rectangle en A. Quelle égalité est correcte ? (AB²+AC²=BC² ou AB²+BC²=AC²)','AB²+AC²=BC²','cours','Connaître les propriétés'),q('Calculer : 7²','49','auto','Calculer un carré'),q('Calculer : √81','9','auto','Calculer une racine carrée'),q('Calculer : 12²−5²','119','auto','Calculer avec des carrés'),q('Un triangle rectangle a des côtés de l’angle droit de 6 cm et 8 cm. Calculer l’hypoténuse en cm.','10','exo','Calculer une hypoténuse'),q('Un triangle rectangle a une hypoténuse de 13 cm et un côté de 5 cm. Calculer l’autre côté en cm.','12','exo','Calculer un côté de l’angle droit'),q('Un triangle de côtés 5 cm, 12 cm et 13 cm est-il rectangle ? (oui/non)','oui','exo','Reconnaître un triangle rectangle'),q('Un triangle de côtés 6 cm, 7 cm et 9 cm est-il rectangle ? (oui/non)','non','exo','Reconnaître un triangle rectangle'),q('Un rectangle mesure 5 cm sur 7 cm. Donner sa diagonale au dixième de cm.','8,6','exo','Résoudre un problème'),q('Un triangle rectangle a pour côtés de l’angle droit 3 cm et 4 cm. Quelle est son aire en cm² ?','6','exo','Utiliser des propriétés géométriques')];
  else if(l==='6e'&&ch==='Nombres décimaux')bank=[q('Quel chiffre est celui des dixièmes dans 12,34 ?','3','cours','Valeur des chiffres'),q('Dans 8,05, le chiffre 5 est-il celui des centièmes ? (oui/non)','oui','cours','Valeur des chiffres'),q('Calculer : 7 + 8','15','auto','Calcul mental'),q('Calculer : 5 × 6','30','auto','Tables'),q('Calculer : 12,5 + 3,4','15,9','exo','Additionner des décimaux'),q('Calculer : 8,6 − 2,3','6,3','exo','Soustraire des décimaux'),q('Calculer : 4 × 2,5','10','exo','Multiplier'),q('Quel est le plus grand : 5,08 ou 5,8 ?','5,8','exo','Comparer des décimaux'),q('Arrondir 12,67 au dixième.','12,7','exo','Arrondir'),q('Compléter : 3,5 m = … cm','350','exo','Convertir')];
  else if(l==='5e'&&ch==='Fractions')bank=[q('Dans 3/7, quel est le dénominateur ?','7','cours','Vocabulaire'),q('Une fraction égale à 1 a-t-elle le même numérateur et dénominateur ? (oui/non)','oui','cours','Connaître les fractions'),q('Calculer : 6 × 7','42','auto','Calcul mental'),q('Calculer : 24 ÷ 3','8','auto','Calcul mental'),q('Calculer : 1/4 + 2/4 (répondre sous la forme a/b)','3/4','exo','Additionner des fractions'),q('Calculer : 5/6 − 1/6 (répondre sous la forme a/b)','4/6','exo','Soustraire des fractions'),q('Quelle fraction de 12 représente 3 ? (forme a/b)','3/12','exo','Interpréter une fraction'),q('Calculer les 3/4 de 20.','15','exo','Prendre une fraction'),q('Comparer 1/2 et 1/3 : écrire la plus grande.','1/2','exo','Comparer des fractions')];
