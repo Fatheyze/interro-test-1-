@@ -371,7 +371,15 @@ function questionAudit(items){
  const distinct=new Set(items.map(x=>questionSignature(x))).size;
  const kinds=Object.entries(groups).filter(([,v])=>v.length).map(([k,v])=>(k==='cours'?'Cours':k==='auto'?'Automatismes':'Exercices')+' : '+v.length);
  const duplicates=items.length-distinct;
- return '<strong>Composition pédagogique</strong> · '+kinds.join(' · ')+' · '+distinct+' compétence(s) distincte(s)'+(duplicates?' · Attention : '+duplicates+' répétition(s) de compétence':'')+'.<br><span class="muted">Vérifiez les consignes et les réponses avant de projeter le sujet. Une réponse rédigée ou une démonstration nécessite une correction humaine.</span>';
+ const issues=[];
+ for(let i=0;i<items.length;i++){
+  const x=items[i],t=x.text||'',a=String(x.answer||'');
+  if(!t.trim()||!a.trim())issues.push('Q'+(i+1)+' : énoncé ou réponse manquant');
+  if(/arrondi?\s+au\s+(dixième|centième|millième)/i.test(t)&&!/^[-+]?\d+[,.]\d+$/.test(a))issues.push('Q'+(i+1)+' : vérifier la précision de la réponse attendue');
+  if(/justifi|démontr|prouv|rédig/i.test(t))issues.push('Q'+(i+1)+' : raisonnement écrit non vérifiable automatiquement');
+  if(/\bABC\b/.test(t)&&/rectangle en (B|C)/i.test(t)&&graphForQuestion(x))issues.push('Q'+(i+1)+' : vérifier la position de l’angle droit');
+ }
+ return '<strong>Composition pédagogique</strong> · '+kinds.join(' · ')+' · '+distinct+' compétence(s) distincte(s)'+(duplicates?' · '+duplicates+' répétition(s) de compétence':'')+'.'+(issues.length?'<div style="margin-top:8px;color:#ffcf38"><strong>Points de vigilance</strong><ul>'+issues.map(x=>'<li>'+escapeHTML(x)+'</li>').join('')+'</ul></div>':'')+'<div class="muted" style="margin-top:8px">Une réponse courte peut être notée automatiquement, mais une démonstration doit être évaluée par le professeur.</div>';
 }
 function renderPreview(){$('quizAudit').innerHTML=questionAudit(quiz);$('previewMeta').textContent=level+' · '+selectedChapters().join(' + ')+' · '+quiz.length+' questions';$('previewQuestions').innerHTML=quiz.map((x,i)=>`<div class="question"><span class="pill">Q${i+1} · ${x.kind==='cours'?'Cours':x.kind==='auto'?'Automatisme':'Exercice'}</span><p>${escapeHTML(x.text)}</p>${graphForQuestion(x)}<small>${escapeHTML(x.competence)}</small><details><summary>Réponse attendue (professeur)</summary><b>${escapeHTML(x.answer)}</b></details></div>`).join('')}
 function launch(){renderStudentChoices();$('student').classList.remove('hidden');$('teacher').classList.remove('hidden');$('studentActive').classList.remove('hidden');$('studentDone').classList.add('hidden');$('studentQuestions').innerHTML=quiz.map((x,i)=>`<div class="question"><span class="pill">Question ${i+1} / ${quiz.length}</span><p>${escapeHTML(x.text)}</p>${graphForQuestion(x)}<input type="text" data-answer="${i}" placeholder="Votre réponse" autocomplete="off"></div>`).join('');document.querySelectorAll('[data-answer]').forEach(el=>el.oninput=()=>{studentAnswers[+el.dataset.answer]=el.value});renderTeacher();$('student').scrollIntoView({behavior:'smooth'})}
