@@ -65,6 +65,69 @@ function rigorousBank(l,ch){
  add('La moyenne de quatre valeurs est 12. Trois valeurs sont 8 ; 11 ; 13. Quelle est la quatrième valeur ?','16','exo','Retrouver une valeur à partir de la moyenne');
  add('Une enquête indique : vélo 8 élèves, marche 12 élèves, bus 10 élèves. Quel pourcentage vient à pied ? Arrondir au dixième si nécessaire.','40','exo','Interpréter un tableau d’effectifs');
  }
+
+ // Progression construite à partir des objectifs des cours PDF transmis.
+ if(l==='6e'&&ch==='Nombres entiers'){
+ add('Dans le nombre 4 507 236, quel est le chiffre des dizaines de milliers ?','0','cours','Valeur de position');
+ add('Comment appelle-t-on le résultat d’une division euclidienne, avant le reste ?','quotient','cours','Vocabulaire de la division');
+ add('Calculer 7 × 8.','56','auto','Tables de multiplication');
+ add('Calculer 6 000 + 400 + 20 + 9.','6429','auto','Décomposition décimale');
+ add('Quel est le nombre entier immédiatement supérieur à 99 999 ?','100000','exo','Ordre des entiers');
+ add('Un collège commande 27 lots de 24 cahiers. Combien de cahiers reçoit-il ?','648','exo','Problème multiplicatif');
+ add('On répartit 157 livres dans des cartons pouvant contenir 12 livres. Combien de cartons pleins peut-on constituer ?','13','exo','Quotient euclidien en contexte');
+ add('Un stade accueille 12 480 personnes le samedi et 9 760 le dimanche. Combien de spectateurs au total ?','22240','exo','Addition de grands nombres');
+ }
+ if(l==='6e'&&ch==='Nombres décimaux'){
+ add('Dans 47,305, quel est le chiffre des centièmes ?','0','cours','Rang des chiffres décimaux');
+ add('Un nombre décimal possède-t-il nécessairement une écriture avec une virgule ? (oui/non)','non','cours','Définition d’un nombre décimal');
+ add('Écrire 3/10 sous forme décimale.','0,3','auto','Dixièmes et écriture décimale');
+ add('Calculer 0,7 + 0,08.','0,78','auto','Addition de décimaux');
+ add('Quel nombre est le plus grand : 4,09 ou 4,9 ?','4,9','exo','Comparer des décimaux');
+ add('Une bouteille contient 1,25 L de jus. Combien de litres contiennent quatre bouteilles identiques ?','5','exo','Problème multiplicatif avec décimaux');
+ add('Arrondir 13,786 au centième.','13,79','exo','Arrondir un décimal');
+ add('Écrire 8 unités et 45 millièmes sous forme décimale.','8,045','exo','Décomposition décimale');
+ }
+ if(l==='6e'&&ch==='Triangles'){
+ add('Quelle est la somme des mesures des angles d’un triangle, en degrés ?','180','cours','Somme des angles');
+ add('Comment appelle-t-on un triangle qui possède deux côtés de même longueur ?','isocèle','cours','Vocabulaire des triangles');
+ add('Un triangle a deux angles de 45° et 70°. Mesurer le troisième angle, en degrés.','65','auto','Calcul d’un angle');
+ add('Dans un triangle équilatéral, combien mesure chaque angle, en degrés ?','60','auto','Propriété du triangle équilatéral');
+ add('Un triangle isocèle en A a un angle au sommet de 40°. Mesurer chacun de ses angles à la base, en degrés.','70','exo','Angles à la base');
+ add('Peut-on construire un triangle de côtés 3 cm, 4 cm et 9 cm ? (oui/non)','non','exo','Inégalité triangulaire');
+ add('Un triangle a un angle droit et un autre angle de 35°. Quelle est la mesure du dernier angle, en degrés ?','55','exo','Triangle rectangle');
+ }
+ if(l==='6e'&&ch==='Proportionnalité'){
+ add('Si le prix est proportionnel à la quantité, le prix pour une unité reste-t-il constant ? (oui/non)','oui','cours','Reconnaître une proportionnalité');
+ add('Calculer 3 × 7.','21','auto','Multiplication et proportionnalité');
+ add('Quatre cahiers identiques coûtent 10 €. Combien coûtent huit cahiers, en € ?','20','exo','Linéarité multiplicative');
+ add('Six stylos coûtent 9 €. Quel est le prix d’un stylo, en € ?','1,5','exo','Passage à l’unité');
+ add('Un abonnement coûte 12 € de frais fixes puis 3 € par séance. Le prix total est-il proportionnel au nombre de séances ? (oui/non)','non','exo','Reconnaître une situation non proportionnelle');
+ add('Une recette pour 4 personnes nécessite 300 g de farine. Quelle quantité de farine faut-il pour 10 personnes, en g ?','750','exo','Proportionnalité en contexte');
+ }
+ if(l==='5e'&&ch==='Parallélogrammes'){
+ add('Dans un parallélogramme, les côtés opposés sont-ils parallèles ? (oui/non)','oui','cours','Définition du parallélogramme');
+ add('Dans un parallélogramme, les diagonales se coupent-elles en leur milieu ? (oui/non)','oui','cours','Propriété des diagonales');
+ add('Calculer 8 × 5.','40','auto','Calcul d’une aire');
+ add('Un parallélogramme a une base de 12 cm et une hauteur correspondante de 5 cm. Calculer son aire, en cm².','60','exo','Aire du parallélogramme');
+ add('ABCD est un parallélogramme et AB = 7 cm. Quelle est la longueur CD, en cm ?','7','exo','Égalité des côtés opposés');
+ add('ABCD est un parallélogramme. L’angle ABC mesure 65°. Quelle est la mesure de l’angle BCD, en degrés ?','115','exo','Angles consécutifs supplémentaires');
+ }
+ if(l==='5e'&&ch==='Nombres relatifs'){
+ add('Quel est l’opposé de −12 ?','12','cours','Opposé d’un relatif');
+ add('Quel nombre est le plus petit : −8 ou −3 ?','-8','auto','Comparer des relatifs');
+ add('Calculer −4 + 9.','5','auto','Addition de relatifs');
+ add('La température passe de −3 °C à 5 °C. De combien de degrés augmente-t-elle ?','8','exo','Écart de températures');
+ add('Un plongeur se trouve à −12 m puis remonte de 7 m. Quelle est sa nouvelle altitude en mètres ?','-5','exo','Repérage relatif en contexte');
+ add('Le point A a pour coordonnées (−2 ; 4). Quelle est son abscisse ?','-2','exo','Lire des coordonnées');
+ }
+ if(l==='5e'&&ch==='Fractions'){
+ add('Dans 7/12, quel est le numérateur ?','7','cours','Vocabulaire des fractions');
+ add('Calculer 1/4 + 2/4. Répondre par une fraction.','3/4','auto','Addition de fractions de même dénominateur');
+ add('Simplifier 6/9 au maximum.','2/3','exo','Fractions équivalentes');
+ add('Calculer 3/4 de 28.','21','exo','Fraction d’une quantité');
+ add('Dans une classe de 30 élèves, 2/5 pratiquent un sport en club. Combien cela représente-t-il d’élèves ?','12','exo','Fraction d’un effectif');
+ add('Quelle fraction est la plus grande : 3/5 ou 2/3 ?','2/3','exo','Comparer deux fractions');
+ }
  return a;
 }
 function questionBank(l,ch){const rigorous=rigorousBank(l,ch);if(rigorous.length)return rigorous;let bank=[];
