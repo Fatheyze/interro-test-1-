@@ -458,7 +458,7 @@ async function startLiveSession(){
  if(!window.QRCode){alert('Le module QR code n’est pas chargé. Vérifiez la connexion internet.');return}
  const code=liveRandomCode(),id=Array.from(crypto.getRandomValues(new Uint8Array(8)),x=>x.toString(16).padStart(2,'0')).join('');
  teacherSession={code,id,classe:$('classe').value,students:[...currentRoster().students]};liveSeen=new Set();copies=[];closed=false;validated=false;
- const payload={v:2,type:'subject',session:id,classe:$('classe').value,level,questions:quiz.map(x=>({text:x.text,kind:x.kind,competence:x.competence,figure:geometricFigure(x)})),students:teacherSession.students};
+ const payload={v:2,type:'subject',session:id,classe:$('classe').value,level,questions:quiz.map(x=>({text:x.text,kind:x.kind,competence:x.competence})),students:teacherSession.students};
  try{localStorage.setItem('ifc_subject_'+code,JSON.stringify(payload));await livePublish(code,payload)}catch(e){alert('Impossible de publier le sujet sur ntfy.sh : '+e.message);return}
  const link=liveURL(code);$('projectLive').onclick=()=>window.open(projectionURL(code),'interro_flash_projection','width=950,height=850');$('liveCode').textContent=code;$('liveLink').href=link;$('liveLink').textContent=link;
  $('liveQr').innerHTML='';new QRCode($('liveQr'),{text:link,width:210,height:210,correctLevel:QRCode.CorrectLevel.M});
