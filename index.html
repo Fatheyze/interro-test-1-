@@ -337,17 +337,30 @@ function selectDiverse(pool,count,used){
  return result;
 }
 function makeQuiz(){
- const n=+$('count').value,p=mode==='auto'?100:mode==='chapitre'?0:+$('ratio').value;
- const counts={cours:mode==='auto'?0:Math.round(n*.2),auto:mode==='auto'?n:Math.round(n*p/100)};
- counts.exo=n-counts.cours-counts.auto;
+ const n=Math.max(1,Number($('count').value)||10);
+ const p=Math.max(0,Math.min(100,Number($('ratio').value)||0));
  const selected=selectedChapters();
  if(mode!=='auto'&&!selected.length){alert('Sélectionnez au moins un chapitre.');return}
- let bank=[];for(const ch of selected)bank.push(...questionBank(level,ch).map(x=>({...x,chapter:ch})));
- if(mode==='auto'&&!bank.length)bank=questionBank(level,chapters[level][0]);
- const used=new Set(),chosen=[];for(const kind of ['cours','auto','exo'])chosen.push(...selectDiverse(bank.filter(q=>q.kind===kind),counts[kind],used));
+ let bank=[];
+ for(const ch of selected)bank.push(...questionBank(level,ch).map(x=>({...x,chapter:ch})));
+ if(mode==='auto'&&!bank.length)bank=chapters[level].flatMap(ch=>questionBank(level,ch).filter(x=>x.kind==='auto').map(x=>({...x,chapter:ch})));
+ const available={cours:[],auto:[],exo:[]};
+ for(const kind of Object.keys(available)){
+  const seen=new Set();
+  available[kind]=shuffle(bank.filter(x=>x.kind===kind)).filter(x=>{const signature=questionSignature(x);if(seen.has(signature))return false;seen.add(signature);return true});
+ }
+ const targets=mode==='auto'?{cours:0,auto:n,exo:0}:{cours:Math.min(n,Math.round(n*.2)),auto:Math.min(n,Math.round(n*p/100)),exo:0};
+ if(mode!=='auto'){targets.auto=Math.min(targets.auto,n-targets.cours);targets.exo=n-targets.cours-targets.auto}
+ const used=new Set(),chosen=[];
+ for(const kind of ['cours','auto','exo'])chosen.push(...selectDiverse(available[kind],targets[kind],used));
+ // Compléter avec des compétences réellement différentes lorsque le quota d'un type est épuisé.
+ if(chosen.length<n){
+  const remaining=shuffle(bank.filter(x=>!used.has(questionSignature(x))));
+  chosen.push(...selectDiverse(remaining,n-chosen.length,used));
+ }
  quiz=shuffle(chosen.map((x,i)=>({...x,id:'question-'+i})));
- if(quiz.length<n)alert('Cette sélection propose '+quiz.length+' compétences distinctes sur '+n+' questions demandées. Aucun exercice identique n’a été ajouté pour compléter artificiellement.');
- if(!quiz.length)return;
+ if(quiz.length<n)alert('Cette sélection contient '+quiz.length+' compétences distinctes sur '+n+' questions demandées. Pour en obtenir davantage, sélectionnez un autre chapitre ou réduisez le nombre de questions.');
+ if(!quiz.length){alert('Aucune question disponible pour cette sélection.');return}
  copies=[];closed=false;validated=false;studentAnswers=Array(quiz.length).fill('');
  $('preview').classList.remove('hidden');$('student').classList.add('hidden');$('teacher').classList.add('hidden');renderPreview();$('preview').scrollIntoView({behavior:'smooth'});
 }
