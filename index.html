@@ -74,18 +74,31 @@ function generatedQuestions(l,ch){
  for(let i=0;i<28;i++){
  const a=2+i,b=3+(i%7),c=2+(i%5),kind=i<9?'auto':'exo',skill=ch;
  switch(group){
- case 'stats':{const vals=[a,a+2,a+4];add('Série : '+vals.join(' ; ')+'. Calculer la moyenne.',a+2,kind,skill);break}
+ case 'stats':{
+ const contexts=[
+ {label:'Dans une équipe de basket, trois joueurs mesurent',unit:'cm',base:165,question:'Quelle est leur taille moyenne, en cm ?'},
+ {label:'Dans une équipe de football, trois joueurs ont couru',unit:'km',base:5,question:'Quelle est la distance moyenne parcourue, en km ?'},
+ {label:'Au collège, trois élèves ont obtenu les notes',unit:'sur 20',base:4,question:'Quelle est leur note moyenne sur 20 ?'},
+ {label:'Pendant trois jours, une classe a relevé les températures',unit:'°C',base:8,question:'Quelle est la température moyenne, en °C ?'},
+ {label:'Dans une médiathèque, trois élèves ont emprunté',unit:'livres',base:1,question:'Combien de livres ont-ils empruntés en moyenne ?'},
+ {label:'Lors de trois entraînements, un coureur a effectué',unit:'tours de piste',base:3,question:'Quel est le nombre moyen de tours ?'},
+ {label:'Pendant trois trajets à vélo, Léa a parcouru',unit:'km',base:3,question:'Quelle distance moyenne a-t-elle parcourue, en km ?'}
+ ];
+ const ctx=contexts[i%contexts.length],mid=ctx.base+(i%5),vals=[mid-2,mid,mid+2];
+ if(kind==='auto')add('Calculer la moyenne de la série : '+vals.join(' ; ')+'.',mid,kind,'Calculer une moyenne');
+ else add(ctx.label+' '+vals.join(' '+ctx.unit+' ; ')+' '+ctx.unit+'. '+ctx.question,mid,kind,'Interpréter et calculer une moyenne en contexte');
+ break}
  case 'proba':add('Une urne contient '+a+' boules rouges et '+a+' bleues. Probabilité de tirer une rouge (fraction simplifiée) ?','1/2',kind,skill);break;
  case 'fractions':add('Calculer '+a+'/'+b+' + 1/'+b+' (répondre sous la forme a/b).',(a+1)+'/'+b,kind,skill);break;
- case 'proportion':add(a+' objets coûtent '+(a*c)+' €. Combien coûtent '+(a+1)+' objets, en € ?', (a+1)*c,kind,skill);break;
- case 'pythagore':add('Triangle rectangle : côtés de l’angle droit '+(3*c)+' cm et '+(4*c)+' cm. Hypoténuse en cm ?',5*c,kind,skill);break;
+ case 'proportion':add(kind==='auto'?'Calculer '+(a*c)+' ÷ '+a+'.':'Pour la sortie scolaire, '+a+' billets de musée coûtent '+(a*c)+' €. Combien coûtent '+(a+1)+' billets au même tarif, en € ?',kind==='auto'?c:(a+1)*c,kind,skill);break;
+ case 'pythagore':add(kind==='auto'?'Dans un triangle rectangle, les deux côtés de l’angle droit mesurent '+(3*c)+' cm et '+(4*c)+' cm. Calculer l’hypoténuse en cm.':'Un jardin rectangulaire mesure '+(3*c)+' m de long et '+(4*c)+' m de large. Quelle est la longueur de sa diagonale, en m ?',5*c,kind,skill);break;
  case 'thales':add('Dans une configuration de Thalès, AB/AC = '+a+'/'+(2*a)+'. Si AD = '+(3*c)+' cm, quelle longueur AE correspondante obtient-on en cm ?',6*c,kind,skill);break;
  case 'trigo':add('Triangle rectangle : côté opposé '+(3*c)+' cm, hypoténuse '+(5*c)+' cm. Donner le sinus de l’angle (fraction simplifiée).','3/5',kind,skill);break;
  case 'angles':add('Deux angles sont complémentaires. Le premier mesure '+(20+a)+'°. Mesure du second en degrés ?',70-a,kind,skill);break;
  case 'geo':add('Un triangle a deux angles de '+(30+a)+'° et 60°. Mesure du troisième en degrés ?',90-a,kind,skill);break;
- case 'volume':add('Pavé droit : '+a+' cm × '+b+' cm × '+c+' cm. Volume en cm³ ?',a*b*c,kind,skill);break;
- case 'mesure':add('Rectangle de longueur '+(a+3)+' cm et largeur '+b+' cm. Calculer son aire en cm².',(a+3)*b,kind,skill);break;
- case 'fonctions':add('f(x) = '+a+'x + '+b+'. Calculer f('+c+').',a*c+b,kind,skill);break;
+ case 'volume':add(kind==='auto'?'Calculer le volume d’un pavé droit de '+a+' cm × '+b+' cm × '+c+' cm, en cm³.':'Une boîte de rangement a pour dimensions intérieures '+a+' cm, '+b+' cm et '+c+' cm. Quel est son volume, en cm³ ?',a*b*c,kind,skill);break;
+ case 'mesure':add(kind==='auto'?'Rectangle de longueur '+(a+3)+' cm et largeur '+b+' cm : calculer son aire en cm².':'Un potager rectangulaire mesure '+(a+3)+' m sur '+b+' m. Quelle surface occupe-t-il, en m² ?',(a+3)*b,kind,skill);break;
+ case 'fonctions':add(kind==='auto'?'f(x) = '+a+'x + '+b+'. Calculer f('+c+').':'Un taxi facture '+b+' € de prise en charge et '+a+' € par kilomètre. Quel est le prix d’un trajet de '+c+' km, en € ?',a*c+b,kind,skill);break;
  case 'algebre':add('Résoudre '+a+'x + '+b+' = '+(a*c+b)+'. Donner x.',c,kind,skill);break;
  case 'relatifs':add('Calculer ('+(-a)+') × ('+(-b)+').',a*b,kind,skill);break;
  case 'puissances':add('Calculer '+a+'².',a*a,kind,skill);break;
