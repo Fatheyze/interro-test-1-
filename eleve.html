@@ -1,0 +1,31 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Interro Flash — Élève</title><style>:root{font-family:system-ui,sans-serif;color:#fff;background:#1d1034}body{margin:0;padding:20px;background:radial-gradient(circle at top right,#432268,#1d1034 65%)}main{max-width:780px;margin:auto}h1{color:#ffcf38}.card{background:#2b1748;border:1px solid #614783;border-radius:18px;padding:22px;margin:18px 0}input,select,button{font:inherit;padding:13px;border-radius:10px;width:100%;box-sizing:border-box}input,select{background:#190e2a;color:white;border:1px solid #76569c}button{background:#ffcf38;color:#27133e;font-weight:800;border:0;cursor:pointer}label{display:block;margin:15px 0 7px}.question{background:#382251;padding:16px;margin:12px 0;border-radius:12px}.hidden{display:none!important}.muted{color:#d2c1e6}</style></head><body><main><h1>📚 Interro Flash Collège</h1><div class="card" id="loading">Chargement du questionnaire…</div><div id="form" class="hidden"><div class="card"><h2>Votre interrogation</h2><label for="name">Choisissez votre nom</label><select id="name"><option value="">— Choisir mon nom —</option></select></div><div id="questions"></div><div class="card"><button id="submit">Rendre ma copie</button></div></div><div id="done" class="card hidden"><h2>✓ Votre copie a bien été rendue.</h2><p>Vous pouvez fermer cette page.</p></div></main><script>
+'use strict';
+const $=id=>document.getElementById(id),enc=new TextEncoder(),dec=new TextDecoder();
+const code=new URLSearchParams(location.search).get('code')||'';
+const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const from64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0)),to64=b=>btoa(String.fromCharCode(...b));
+async function digest(s){return new Uint8Array(await crypto.subtle.digest('SHA-256',enc.encode(s)))}
+async function channel(){const h=await digest('interro-flash-ntfy-v2:'+code);return 'interroflash_'+Array.from(h.slice(0,16),x=>x.toString(16).padStart(2,'0')).join('')}
+async function key(){return crypto.subtle.importKey('raw',await digest('interro-flash-aes-v2:'+code),{name:'AES-GCM'},false,['encrypt','decrypt'])}
+async function decrypt(msg){const o=JSON.parse(msg),buf=await crypto.subtle.decrypt({name:'AES-GCM',iv:from64(o.iv)},await key(),from64(o.data));return JSON.parse(dec.decode(buf))}
+async function encrypt(obj){const iv=crypto.getRandomValues(new Uint8Array(12)),buf=await crypto.subtle.encrypt({name:'AES-GCM',iv},await key(),enc.encode(JSON.stringify(obj)));return JSON.stringify({v:2,iv:to64(iv),data:to64(new Uint8Array(buf))})}
+let subject=null,answers=[];
+async function load(){
+ if(!/^[A-HJ-NP-Z2-9]{10}$/.test(code))throw Error('Code du sujet invalide.');
+ const response=await fetch('https://ntfy.sh/'+await channel()+'/json?poll=1&since=all');if(!response.ok)throw Error('Relais indisponible ('+response.status+').');
+ const raw=await response.text();for(const line of raw.split(/\r?\n/)){if(!line.trim())continue;try{const event=JSON.parse(line);if(event.event!=='message')continue;const item=await decrypt(event.message);if(item.type==='subject'&&item.v===2)subject=item}catch(e){}}
+ if(!subject||!Array.isArray(subject.students)||!Array.isArray(subject.questions))throw Error('Sujet introuvable ou expiré. Demandez au professeur de relancer la session.');
+ $('name').innerHTML='<option value="">— Choisir mon nom —</option>'+subject.students.map(n=>'<option value="'+escapeHTML(n)+'">'+escapeHTML(n)+'</option>').join('');
+ answers=Array(subject.questions.length).fill('');
+ $('questions').innerHTML=subject.questions.map((q,i)=>'<div class="question"><h3>Question '+(i+1)+' / '+subject.questions.length+'</h3><p>'+escapeHTML(q.text)+'</p><label for="answer'+i+'">Votre réponse</label><input id="answer'+i+'" data-i="'+i+'" autocomplete="off"></div>').join('');
+ document.querySelectorAll('[data-i]').forEach(el=>el.addEventListener('input',()=>answers[+el.dataset.i]=el.value));
+ $('loading').classList.add('hidden');$('form').classList.remove('hidden');
+}
+$('submit').onclick=async()=>{
+ const name=$('name').value;if(!name){alert('Choisissez votre nom.');return}
+ const missing=answers.filter(x=>!x.trim()).length;if(missing&&!confirm('Il reste '+missing+' question(s) sans réponse. Rendre la copie ?'))return;
+ $('submit').disabled=true;$('submit').textContent='Transmission en cours…';
+ try{const body=await encrypt({type:'copy',session:subject.session,name,answers});const res=await fetch('https://ntfy.sh/'+await channel(),{method:'POST',headers:{'Content-Type':'text/plain'},body});if(!res.ok)throw Error('Erreur '+res.status);$('form').classList.add('hidden');$('done').classList.remove('hidden')}catch(e){alert('La copie n’a pas été transmise : '+e.message+'. Réessayez.');$('submit').disabled=false;$('submit').textContent='Réessayer l’envoi'}
+};
+load().catch(e=>{$('loading').textContent='Impossible de charger le questionnaire : '+e.message});
+</script></body></html>
