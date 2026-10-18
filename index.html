@@ -308,8 +308,8 @@ async function startLiveSession(){
  if(!currentRoster()?.students.length){alert('Choisissez une classe avec une liste d’élèves avant de lancer le QR code.');return}
  if(!window.QRCode){alert('Le module QR code n’est pas chargé. Vérifiez la connexion internet.');return}
  const code=liveRandomCode(),id=Array.from(crypto.getRandomValues(new Uint8Array(8)),x=>x.toString(16).padStart(2,'0')).join('');
- teacherSession={code,id,students:[...currentRoster().students]};liveSeen=new Set();copies=[];closed=false;validated=false;
- const payload={v:2,type:'subject',session:id,level,questions:quiz.map(x=>({text:x.text,kind:x.kind,competence:x.competence})),students:teacherSession.students};
+ teacherSession={code,id,classe:$('classe').value,students:[...currentRoster().students]};liveSeen=new Set();copies=[];closed=false;validated=false;
+ const payload={v:2,type:'subject',session:id,classe:$('classe').value,level,questions:quiz.map(x=>({text:x.text,kind:x.kind,competence:x.competence})),students:teacherSession.students};
  try{localStorage.setItem('ifc_subject_'+code,JSON.stringify(payload));await livePublish(code,payload)}catch(e){alert('Impossible de publier le sujet sur ntfy.sh : '+e.message);return}
  const link=liveURL(code);$('projectLive').onclick=()=>window.open(projectionURL(code),'interro_flash_projection','width=950,height=850');$('liveCode').textContent=code;$('liveLink').href=link;$('liveLink').textContent=link;
  $('liveQr').innerHTML='';new QRCode($('liveQr'),{text:link,width:210,height:210,correctLevel:QRCode.CorrectLevel.M});
@@ -336,8 +336,8 @@ function showPublicScreen(kind){
  const screen=document.createElement('main');screen.id='publicScreen';screen.style.cssText='max-width:950px;margin:4vh auto;text-align:center';
  document.body.appendChild(screen);
  if(kind==='projection'){
- const code=decodeURIComponent(location.hash.slice('#projection='.length)),link=liveURL(code);
- screen.innerHTML='<section class="panel"><h1 style="font-size:clamp(30px,5vw,60px)">📱 Interro Flash Collège</h1><h2>Scannez le QR code pour commencer</h2><div id="projectionQr" style="display:inline-block;background:white;padding:18px;border-radius:16px"></div><p>Code du sujet : <strong>'+escapeHTML(code)+'</strong></p><p class="muted">Choisissez votre nom puis répondez aux questions.</p></section>';
+ const code=decodeURIComponent(location.hash.slice('#projection='.length)),link=liveURL(code);const classe=(()=>{try{const saved=JSON.parse(localStorage.getItem('ifc_subject_'+code)||'null');return saved&&typeof saved.classe==='string'?saved.classe:''}catch{return ''}})();
+ screen.innerHTML='<section class="panel"><h1 style="font-size:clamp(30px,5vw,60px)">📱 Interro Flash Collège</h1><h2 style="font-size:clamp(24px,3.5vw,44px);color:#55e1bd">'+(classe?'Classe : '+escapeHTML(classe):'')+'</h2><h2>Scannez le QR code pour commencer</h2><div id="projectionQr" style="display:inline-block;background:white;padding:18px;border-radius:16px"></div><p>Code du sujet : <strong>'+escapeHTML(code)+'</strong></p><p class="muted">Choisissez votre nom puis répondez aux questions.</p></section>';
  const paint=()=>{if(window.QRCode)new QRCode($('projectionQr'),{text:link,width:310,height:310,correctLevel:QRCode.CorrectLevel.M});else setTimeout(paint,100)};paint();
  }else{
  screen.innerHTML='<section class="panel"><h2>Chargement de votre interrogation…</h2><p id="studentLoad">Veuillez patienter.</p></section>';
