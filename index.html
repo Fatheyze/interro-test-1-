@@ -308,8 +308,8 @@ function generatedQuestions(l,ch){
 
 function geometricFigure(x){
  const c=x.competence||'';
- const isThales=/Thalès|parallélisme|parallèles/i.test(c)&&!/Cours|Choisir le théorème/i.test(c);
- const isPyth=/Pythagore|hypoténuse|côté de l’angle droit/i.test(c)&&!/Condition|hypoténuse$/i.test(c);
+ const isThales=/Thalès|parallélisme|parallèles/i.test(c)&&!/Cours|Choisir le théorème|Contraposée/i.test(c);
+ const isPyth=/Pythagore|hypoténuse|côté de l’angle droit/i.test(c)&&!/Condition|hypoténuse$|Réciproque|Contraposée/i.test(c);
  const isShadow=/ombres et Thalès/i.test(c);
  if(isShadow)return '<figure class="math-figure"><svg viewBox="0 0 400 155" role="img" aria-label="Schéma de deux triangles semblables : arbre et bâton verticaux, ombres au sol et rayons solaires parallèles"><path d="M30 130 H375 M75 130 V20 L260 130 M285 130 V77 L375 130" stroke="#e6d8ff" fill="none" stroke-width="2.5"/><path d="M75 115 h15 v15 M285 115 h15 v15" stroke="#55e1bd" fill="none" stroke-width="2"/><text x="42" y="68" fill="white">Arbre</text><text x="300" y="80" fill="white">Bâton</text><text x="143" y="148" fill="white">8 m</text><text x="320" y="148" fill="white">2 m</text><text x="290" y="108" fill="#ffcf38">1,5 m</text></svg><figcaption>Schéma non à l’échelle</figcaption></figure>';
  if(isThales)return '<figure class="math-figure"><svg viewBox="0 0 400 210" role="img" aria-label="Triangle ABC, M sur le segment AB, N sur le segment AC, segment MN tracé. Le parallélisme éventuel est à établir à partir des données."><path d="M200 20 L45 185 L355 185 Z" fill="none" stroke="#e6d8ff" stroke-width="2.5"/><path d="M135 90 L265 90" stroke="#55e1bd" stroke-width="3" stroke-dasharray="7 5"/><g fill="white" font-size="17"><text x="195" y="15">A</text><text x="24" y="200">B</text><text x="355" y="200">C</text><text x="115" y="88">M</text><text x="272" y="88">N</text></g></svg><figcaption>Schéma non à l’échelle — les parallélismes non donnés restent à démontrer</figcaption></figure>';
