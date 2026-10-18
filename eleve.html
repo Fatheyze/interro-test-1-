@@ -26,7 +26,7 @@ async function load(){
  if(!subject||!Array.isArray(subject.students)||!Array.isArray(subject.questions))throw Error('Sujet introuvable ou expiré. Demandez au professeur de relancer la session.');
  $('name').innerHTML='<option value="">— Choisir mon nom —</option>'+subject.students.map(n=>'<option value="'+escapeHTML(n)+'">'+escapeHTML(n)+'</option>').join('');
  answers=Array(subject.questions.length).fill('');
- $('questions').innerHTML=subject.questions.map((q,i)=>'<div class="question"><h3>Question '+(i+1)+' / '+subject.questions.length+'</h3><p>'+escapeHTML(q.text)+'</p><label for="answer'+i+'">Votre réponse</label><input id="answer'+i+'" data-i="'+i+'" autocomplete="off"></div>').join('');
+ $('questions').innerHTML=subject.questions.map((q,i)=>'<div class="question"><h3>Question '+(i+1)+' / '+subject.questions.length+'</h3><p>'+escapeHTML(q.text)+'</p>'+figureFor(q)+'<label for="answer'+i+'">Votre réponse</label><input id="answer'+i+'" data-i="'+i+'" autocomplete="off"></div>').join('');
  document.querySelectorAll('[data-i]').forEach(el=>el.addEventListener('input',()=>answers[+el.dataset.i]=el.value));
  $('loading').classList.add('hidden');$('form').classList.remove('hidden');
 }
