@@ -25,7 +25,7 @@ function questionBank(l,ch){let bank=[];
  else if(ch==='Grandeurs composées')bank=[q('Quelle unité est utilisée pour une vitesse ? (km/h ou km²)','km/h','cours','Reconnaître une grandeur composée'),q('Calculer 120 ÷ 2.','60','auto','Calcul mental'),q('Une voiture parcourt 120 km en 2 h. Quelle est sa vitesse moyenne en km/h ?','60','exo','Calculer une vitesse')];
  else if(ch==='Transformations géométriques'||ch==='Transformations du plan')bank=[q('Une translation conserve-t-elle les longueurs ? (oui/non)','oui','cours','Connaître les transformations'),q('Combien de degrés mesure un demi-tour ?','180','auto','Angles'),q('Un point fait un tour complet autour d’un centre. Combien de degrés représente ce tour ?','360','exo','Reconnaître une rotation')];
  else bank=[];
- return bank;}
+ return [...bank,...generatedQuestions(l,ch)];}
 
 /* Banque originale paramétrée : exercices corrigés, sans contenu tiers. */
 function generatedQuestions(l,ch){
@@ -70,9 +70,9 @@ function generatedQuestions(l,ch){
  scratch:[['Dans Scratch, comment appelle-t-on un personnage ?','lutin'],['Quel bloc permet d’exécuter plusieurs fois les mêmes instructions ?','répéter']],
  nombres:[['Quel chiffre est celui des dixièmes dans 12,34 ?','3'],['Quel est le double de 15 ?','30']]
  };
- for(const [t,a] of course[group])add(t,a,'cours','Connaissances du chapitre : '+ch);
- for(let i=0;i<12;i++){
- const a=2+i,b=3+(i%7),c=2+(i%5),kind=i<5?'auto':'exo',skill=ch;
+ for(const [t,a] of course[group]){add(t,a,'cours','Connaissances du chapitre : '+ch);add('Question rapide — '+t,a,'cours','Connaissances du chapitre : '+ch)}
+ for(let i=0;i<28;i++){
+ const a=2+i,b=3+(i%7),c=2+(i%5),kind=i<9?'auto':'exo',skill=ch;
  switch(group){
  case 'stats':{const vals=[a,a+2,a+4];add('Série : '+vals.join(' ; ')+'. Calculer la moyenne.',a+2,kind,skill);break}
  case 'proba':add('Une urne contient '+a+' boules rouges et '+a+' bleues. Probabilité de tirer une rouge (fraction simplifiée) ?','1/2',kind,skill);break;
